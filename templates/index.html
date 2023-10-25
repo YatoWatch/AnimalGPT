@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href= "{{ url_for('static',filename='styles/styles.css')}}">
+  <title>Recette IA</title>
+</head>
+<body>
+  <div class="left">
+    <button class="new-chat-button button clickable" onclick="newChat()">+ New chat</button>
+    <ul id="chat-list" class="scroll-container"></ul>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <!--<form onsubmit="uploadFile()" method="post" enctype="multipart/form-data">-->
+          <input type="file" name="file" id="file" accept=".zip">
+          <button type="submit">Upload</button>
+        </form>
+
+  </div>
+  <div class="right">
+    <header>
+      <div class="logo-container">
+        <img src="{{ url_for('static',filename='styles/logo.png')}}" alt="RecetteGPT Logo" class="logo">
+      </div>
+      <h1>AnimalGPT</h1>
+      <p>Sort your animal photos!</p>
+    </header>
+      <main>
+        <section class="text-input">
+          <h2>Animal ?</h2>
+          <textarea id="animal" rows="1" placeholder="Enter animal name"></textarea>
+          <button onclick="sendRequest()" class="button clickable icon" id="send-request-button">➤</button>
+        </section>
+        <section class="pictures">
+          <h2>Animal pictures</h2>
+          <div class="container" id="container"></div>
+      
+        </section>
+      </main>
+  </div>
+  <script>
+    const dialogue = document.getElementById("dialogue");
+    const apiTokenInput = document.getElementById("token");
+    const promptField = document.getElementById("input");
+    const button = document.getElementById("send-request-button");
+    const table_images = [];
+
+    const chatList = document.getElementById("chat-list");
+
+    let history = [];
+
+    button.disabled = false;
+
+    async function sendRequest() {
+      // Get the user's input from the textarea
+      var animal_to_find = document.getElementById('animal').value;
+      
+      // Send the request to the server
+      const response = await fetch("/predict", {
+        method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              //Authorization: `Bearer ${apiToken}`,
+          },
+          body: JSON.stringify({animal:animal_to_find}),
+      });
+
+      if (response.ok) {
+        const json = await response.json();
+        json.forEach(lien => {
+              table_images.push(lien)
+            });
+
+        const message = json.answer;
+        //const sources = json.sources;
+        // Display the answer and the sources
+        DisplayImage();
+      }
+    }
+
+    function DisplayImage() {
+      const container = document.getElementById('container');
+      container.innerHTML = ''; // Effacer les images existantes dans le conteneur
+      table_images.forEach(lien => {
+      console.log(lien);
+      const img = document.createElement('img');
+      
+      img.src = lien;
+      container.appendChild(img);
+    });
+  }
+
+    async function uploadFile() {
+      console.log("uploadFile");
+      const file = document.getElementById("file").files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      fetch('/upload', {
+          method: 'POST',
+          // Ne définissez pas le Content-Type manuellement pour les FormData
+          body: formData
+      })
+      .then(response => response.json())
+      .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error('Error:', error);
+      });
+    }
+
+
+    function renderHistory() {
+        dialogue.innerHTML = history
+            .map(({role, content}) => {
+                let messageContent = "";
+                let isCodeBlock = false;
+
+                // Split content into sections based on code blocks
+                const contentSections = content.split(/```/);
+
+                // Loop through each section and render accordingly
+                for (let i = 0; i < contentSections.length; i++) {
+                    const section = contentSections[i];
+
+                    // If the section is a code block, wrap it in a <pre> tag and mark as a code block
+                    if (isCodeBlock) {
+                        messageContent += `<pre class="code">${highlightSyntax(section)}</pre>`;
+                        isCodeBlock = false;
+                    } else {
+                        messageContent += section;
+                        isCodeBlock = true;
+                    }
+                }
+
+                // Render the message HTML with a checkbox for each message
+                return `
+        <div class="message">
+          <span class="message-content">${messageContent}</span>
+          <input type="checkbox" class="message-checkbox" title="Choose messages to use as context for your prompt">
+        </div>
+      `;
+            })
+            .join("");
+
+        setCheckboxes();
+        welcomePanel();
+    }
+
+    
+
+    function highlightSyntax(text) {
+        // Regular expressions for syntax highlighting
+        const bracketsRegex = /[\[\]\{\}\(\)]/g;
+        const quotesRegex = /("|')(?:(?=(\\?))\2.)*?\1/g;
+        const operatorsRegex = /[+\-*/%=<>!&|^~?:;]/g;
+        const symbolsRegex = /[\.,@#$]/g;
+
+        return text.replace(
+            RegExp(
+                [
+                    bracketsRegex.source,
+                    quotesRegex.source,
+                    operatorsRegex.source,
+                    symbolsRegex.source,
+                ].join("|"),
+                "g"
+            ),
+            (match) => {
+                if (bracketsRegex.test(match)) {
+                    bracketsRegex.lastIndex = 0;
+                    return '<span class="syntax-bracket">' + match + "</span>";
+                } else if (quotesRegex.test(match)) {
+                    quotesRegex.lastIndex = 0;
+                    return '<span class="syntax-quote">' + match + "</span>";
+                } else if (operatorsRegex.test(match)) {
+                    operatorsRegex.lastIndex = 0;
+                    return '<span class="syntax-operator">' + match + "</span>";
+                } else if (symbolsRegex.test(match)) {
+                    symbolsRegex.lastIndex = 0;
+                    return '<span class="syntax-symbol">' + match + "</span>";
+                } else {
+                    return match;
+                }
+            }
+        );
+    }
+
+
+    // Custom context by checkbox logic
+
+    function setCheckboxes() {
+        const checkboxList = document.querySelectorAll('.message-checkbox');
+        const start = Math.max(history.length - contextStrategy, 0); // начальный индекс для перебора
+        checkboxList.forEach((checkbox, index) => {
+            checkbox.checked = index >= start;
+        });
+    }
+
+    function generateContext() {
+        const contextMessages = [];
+        const checkboxList = document.querySelectorAll('.message-checkbox');
+        checkboxList.forEach((checkbox, index) => {
+            if (checkbox.checked) {
+                contextMessages.push(history[index]);
+            }
+        });
+        return contextMessages;
+    }
+
+    // Previous chat history save/load/delete/render/new logic
+
+    const HISTORY_KEY = "chat-history";
+
+    function newChat() {
+        history = [];
+        renderHistory();
+    }
+
+    function loadChatList() {
+        chatList.innerHTML = "";
+        const savedHistory = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+
+        savedHistory.forEach((item, index) => {
+            const {name} = item;
+            const listItem = document.createElement("li");
+            listItem.classList.add("chat-list-item");
+            listItem.textContent = name;
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("chat-list-item-delete");
+            deleteButton.classList.add("clickable");
+            deleteButton.textContent = "🗑️";
+            deleteButton.addEventListener("click", () => deleteHistory(index));
+            listItem.appendChild(deleteButton);
+            listItem.addEventListener("click", () => {
+                history = item.history;
+                renderHistory();
+            });
+            chatList.appendChild(listItem);
+        });
+    }
+
+    function deleteHistory(index) {
+        const savedHistory = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+        savedHistory.splice(index, 1);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(savedHistory));
+        loadChatList();
+    }
+
+    function saveHistory(history) {
+        const name = history[0].content.substring(0, 20);
+        const savedHistory = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+        const index = savedHistory.findIndex((item) => item.name === name);
+        if (index === -1) {
+            savedHistory.push({name, history});
+        } else {
+            savedHistory[index] = {name, history};
+        }
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(savedHistory));
+        loadChatList();
+    }
+
+    // welcome panel logic
+    function welcomePanel() {
+        if (!history || history.length === 0) {
+            document.getElementById("welcome-panel").classList.remove('hidden');
+        } else {
+            document.getElementById("welcome-panel").classList.add('hidden');
+        }
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+        loadChatList();
+    });
+  </script>
+</body>
+</html>

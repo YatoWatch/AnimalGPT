@@ -1,0 +1,148 @@
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f4f4f4;
+  color: #333;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px; /* Largeur augmentée à 250px */
+  height: 100%;
+  background-color: #333;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.right {
+  margin-left: 250px; /* Largeur augmentée à 250px */
+}
+
+/* Autres styles inchangés */
+
+.new-chat-button {
+  background-color: #34a853;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+form {
+  margin-bottom: 10px;
+}
+
+input[type="file"] {
+  margin-bottom: 10px;
+}
+
+header {
+  background-color: #34a853;
+  color: #fff;
+  text-align: center;
+  padding: 0.5em 0;
+  position: relative;
+}
+
+.logo-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.logo {
+  width: 100px;
+  height: 100px;
+}
+
+main {
+  padding: 2em;
+}
+
+h2 {
+  color: #34a853;
+}
+
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 0.5em 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+#animal {
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 200px; /* Ajustement de la largeur */
+  box-sizing: border-box;
+  resize: none;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+img {
+  width: 100%;
+  height: auto;
+}
+
+#chat-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.chat-list-item:hover {
+  background-color: rgb(42, 42, 42);
+}
+
+.chat-list-item-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 10px;
+  flex: 1;
+}
+
+.chat-list-item-delete {
+  font-size: 20px;
+  color: #ccc;
+  cursor: pointer;
+  margin-left: auto;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+.scroll-container {
+  overflow-y: auto;
+  max-height: calc(100vh - 200px);
+}
