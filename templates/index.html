@@ -35,7 +35,7 @@
         </section>
         <section class="pictures">
           <h2>Animal pictures</h2>
-          <div class="container" id="container"></div>
+          <div class="container" id="containerID"></div>
       
         </section>
       </main>
@@ -45,7 +45,8 @@
     const apiTokenInput = document.getElementById("token");
     const promptField = document.getElementById("input");
     const button = document.getElementById("send-request-button");
-    const table_images = [];
+    var table_images = [];
+    var animal_find = "";
 
     const chatList = document.getElementById("chat-list");
 
@@ -56,7 +57,7 @@
     async function sendRequest() {
       // Get the user's input from the textarea
       var animal_to_find = document.getElementById('animal').value;
-      
+      animal_find = animal_to_find;
       // Send the request to the server
       const response = await fetch("/predict", {
         method: "POST",
@@ -69,6 +70,7 @@
 
       if (response.ok) {
         const json = await response.json();
+        table_images=[];
         json.forEach(lien => {
               table_images.push(lien)
             });
@@ -81,16 +83,21 @@
     }
 
     function DisplayImage() {
-      const container = document.getElementById('container');
-      container.innerHTML = ''; // Effacer les images existantes dans le conteneur
-      table_images.forEach(lien => {
-      console.log(lien);
-      const img = document.createElement('img');
+      var container = document.getElementById("containerID");
+
+      var newDiv = document.createElement('div');
+      newDiv.id = animal_find;
+      newDiv.innerHTML = "<h2>" + animal_find + "</h2>";
+
+      // Ajouter le nouveau div à un élément parent, par exemple body
+      container.appendChild(newDiv);
       
-      img.src = lien;
-      container.appendChild(img);
-    });
-  }
+      table_images.forEach(lien => {
+        const img = document.createElement('img');
+        img.src = lien;
+        newDiv.appendChild(img);
+      });
+    }
 
     async function uploadFile() {
       console.log("uploadFile");

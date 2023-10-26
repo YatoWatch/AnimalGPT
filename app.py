@@ -4,8 +4,20 @@ import zipfile
 import os
 import shutil
 
+from urllib.request import urlopen
+from PIL import Image
+import timm
+import torch
+
+
+import json
+
 app = Flask(__name__)
 folder_animal="static/animal/"
+model = timm.create_model('mobilenetv3_large_100.ra_in1k', pretrained=True)
+model = model.eval()
+data_config = timm.data.resolve_model_data_config(model)
+transforms = timm.data.create_transform(**data_config, is_training=False)
 
 # Function to check if a file is a picture (PNG, JPG, or JPEG)
 def is_picture(filename):
@@ -44,6 +56,53 @@ def tab_picture(directory):
 
     return(tab)
 
+
+def add_to_dictionnary(path, id, dictionnary):
+  if not id in dictionnary:
+    dictionnary[id] = []
+  dictionnary[id].append(path)
+
+def identifyAnimal(path, percentage):
+  img = Image.open(path)
+  output = model(transforms(img).unsqueeze(0))  # unsqueeze single image into batch of 1
+  top5_probabilities, top5_class_indices = torch.topk(output.softmax(dim=1) * 100, k=5)
+  if(top5_probabilities[0][0].item() < percentage):
+    # print("Error : percentage")
+    return -1
+  else:
+    return top5_class_indices[0][0].item()
+  
+
+
+def find_id_animal(name, dictionnary):
+  # Iterate over dictionary keys and values
+  animalTab = []
+  for key, value in dictionnary.items():
+      if isinstance(value, list):
+          if any(name in v for v in value):
+              animalTab.append(key)
+      else:
+          if name in value:
+              animalTab.append(key)
+  return animalTab
+
+def find_animal(animalId,tab_link):
+    dictionnary = {}
+    perc = 30
+    for j in range(len(animalId)):
+        for i in tab_link:
+            print(str(i))
+            result = identifyAnimal(i, perc)
+            if(result == -1):
+                pass
+            else:
+                if(result == int(animalId[j])):
+                    add_to_dictionnary(i, result, dictionnary)
+    return dictionnary
+
+
+###########################################################################""
+
 # Route for the index page
 @app.route('/')
 def index():
@@ -67,7 +126,27 @@ def upload_file():
 def get_animal_data():
     data = request.get_json()
     tab=tab_picture(folder_animal)
-    return tab
+
+    # Spécifiez le chemin vers votre fichier JSON
+    database = 'data.json'
+
+    # Ouvrez le fichier JSON en mode lecture
+    with open(database, 'r') as fichier:
+        # Chargez le contenu du fichier JSON dans un dictionnaire
+        database_dic = json.load(fichier)
+
+    animal_id = find_id_animal(data['animal'], database_dic)
+    print("test", animal_id)
+    find_animal_res = find_animal(animal_id,tab)
+
+    res=[]
+    print(find_animal_res)
+    for i in find_animal_res:
+        print(i)
+        for j in find_animal_res[i]:
+            res.append(str(j))
+    print(res)
+    return res
 
 if __name__ == '__main__':
     shutil.rmtree(folder_animal)
