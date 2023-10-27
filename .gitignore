@@ -1,3 +1,4 @@
 .venv/
 folder_animal/
 *.zip
+models/*

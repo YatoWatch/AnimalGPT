@@ -9,8 +9,8 @@ from PIL import Image
 import timm
 import torch
 
-
 import json
+import privateGPT
 
 folder_animal="static/animal/"
 zip_name=""
@@ -163,6 +163,10 @@ def get_animal_data():
     zip_name= res_folder
 
     zip_folder(res_folder,zip_name)
+
+    answer, sources = privateGPT.call_model(data['animal'], "LlamaCpp", hide_source=False)
+    print(answer)
+    
     zip_name+=".zip"
     return res
 
@@ -174,6 +178,8 @@ def download_file():
         return None
 
 if __name__ == '__main__':
+    privateGPT.ingest()
     shutil.rmtree(folder_animal)
     os.mkdir(folder_animal)
+    app.config['UPLOAD_FOLDER'] = 'source_documents'
     app.run(debug=True)
