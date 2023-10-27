@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 import zipfile
 import os
 import shutil
+from dotenv import load_dotenv
 
 from flask_cors import CORS
 
@@ -12,9 +13,10 @@ import timm
 import torch
 
 
+load_dotenv()
+
 import json
 
-app = Flask(__name__)
 folder_animal="static/animal/"
 zip_name=""
 model = timm.create_model('mobilenetv3_large_100.ra_in1k', pretrained=True)
@@ -117,7 +119,7 @@ def zip_folder(folder_name, zip_name):
 
 
 ###########################################################################""
-
+app = Flask(__name__)
 CORS(app)
 
 # Route for the index page
@@ -179,4 +181,4 @@ def download_file():
 if __name__ == '__main__':
     shutil.rmtree(folder_animal)
     os.mkdir(folder_animal)
-    app.run(port=3000, debug=True)
+    app.run(port=3001, debug=True)
