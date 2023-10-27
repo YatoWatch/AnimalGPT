@@ -35,6 +35,7 @@
         </section>
         <section class="pictures">
           <h2>Animal pictures</h2>
+          <button id="downloadButton" onclick="Download_zip()">Download</button>
           <div class="container" id="containerID"></div>
       
         </section>
@@ -114,6 +115,28 @@
         // Handle any errors that occurred during the request
         console.error('Error:', error);
       });
+    }
+
+    async function Download_zip() {
+      const response = await fetch("/download", {
+        method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              //Authorization: `Bearer ${apiToken}`,
+          },
+      });
+
+      if (response.ok) {
+        var url = '/static/animal/' + animal_find + ".zip";
+
+        // Créer un élément <a> dynamique
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = animal_find + ".zip"
+
+        // Déclencher un clic sur l'élément <a>
+        a.click();
+      }
     }
 
 

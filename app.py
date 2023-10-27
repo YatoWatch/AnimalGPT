@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, url_for
+from flask import Flask, render_template, request, flash, redirect, url_for, send_file
 from werkzeug.utils import secure_filename
 import zipfile
 import os
@@ -14,6 +14,7 @@ import json
 
 app = Flask(__name__)
 folder_animal="static/animal/"
+zip_name=""
 model = timm.create_model('mobilenetv3_large_100.ra_in1k', pretrained=True)
 model = model.eval()
 data_config = timm.data.resolve_model_data_config(model)
@@ -91,7 +92,6 @@ def find_animal(animalId,tab_link):
     perc = 30
     for j in range(len(animalId)):
         for i in tab_link:
-            print(str(i))
             result = identifyAnimal(i, perc)
             if(result == -1):
                 pass
@@ -99,6 +99,19 @@ def find_animal(animalId,tab_link):
                 if(result == int(animalId[j])):
                     add_to_dictionnary(i, result, dictionnary)
     return dictionnary
+
+
+def copy_images_to_folder(image_paths, folder_name):
+    # Créer un dossier s'il n'existe pas
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+    
+    # Copier chaque image dans le dossier
+    for image_path in image_paths:
+        shutil.copy(image_path, os.path.join(folder_name, os.path.basename(image_path)))
+
+def zip_folder(folder_name, zip_name):
+    shutil.make_archive(zip_name, 'zip', folder_name)
 
 
 ###########################################################################""
@@ -124,6 +137,7 @@ def upload_file():
 # Route to handle animal data prediction
 @app.route('/predict', methods=['POST'])
 def get_animal_data():
+    global zip_name
     data = request.get_json()
     tab=tab_picture(folder_animal)
 
@@ -136,17 +150,27 @@ def get_animal_data():
         database_dic = json.load(fichier)
 
     animal_id = find_id_animal(data['animal'], database_dic)
-    print("test", animal_id)
     find_animal_res = find_animal(animal_id,tab)
 
     res=[]
-    print(find_animal_res)
     for i in find_animal_res:
-        print(i)
         for j in find_animal_res[i]:
             res.append(str(j))
-    print(res)
+
+    res_folder = "static/animal/" + data['animal']
+    copy_images_to_folder(res,res_folder)
+    zip_name= res_folder
+
+    zip_folder(res_folder,zip_name)
+    zip_name+=".zip"
     return res
+
+@app.route('/download', methods=['POST'])
+def download_file():
+    if zip_name != "":
+        return send_file(zip_name, as_attachment=True)
+    else:
+        return None
 
 if __name__ == '__main__':
     shutil.rmtree(folder_animal)
