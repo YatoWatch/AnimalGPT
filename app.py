@@ -3,9 +3,7 @@ from werkzeug.utils import secure_filename
 import zipfile
 import os
 import shutil
-
 from flask_cors import CORS
-
 from urllib.request import urlopen
 from PIL import Image
 import timm
