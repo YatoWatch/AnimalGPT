@@ -7,12 +7,15 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
+RUN apt-get update && apt-get -y wget
+
 RUN mkdir ./static/animal 
 RUN mkdir ./models && cd models/
 RUN wget https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/resolve/main/llama-2-7b-chat.ggmlv3.q4_0.bin
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install llama-cpp-python==0.1.65 --force-reinstall --upgrade --no-cache-dir
 
 # Make port 5000 available to the world outside this container
 EXPOSE 5000
