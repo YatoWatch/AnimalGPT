@@ -3,7 +3,6 @@ from werkzeug.utils import secure_filename
 import zipfile
 import os
 import shutil
-from dotenv import load_dotenv
 
 from flask_cors import CORS
 
@@ -12,8 +11,6 @@ from PIL import Image
 import timm
 import torch
 
-
-load_dotenv()
 
 import json
 
@@ -181,4 +178,4 @@ def download_file():
 if __name__ == '__main__':
     shutil.rmtree(folder_animal)
     os.mkdir(folder_animal)
-    app.run(port=3001, debug=True)
+    app.run(debug=True)

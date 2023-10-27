@@ -109,14 +109,6 @@ joblib
 json5==0.9.14
 jsonschema==4.18.0
 jsonschema-specifications==2023.6.1
-jupyter-tensorboard @ git+https://github.com/cliffwoolley/jupyter_tensorboard.git@ffa7e26138b82549453306e06b535a9ac36db17a
-jupyter_client==8.3.0
-jupyter_core==5.3.1
-jupyterlab==2.3.2
-jupyterlab-pygments==0.2.2
-jupyterlab-server==1.2.0
-jupytext==1.14.7
-kiwisolver==1.4.4
 langchain==0.0.177
 langcodes==3.3.0
 lark-parser==0.12.0
@@ -200,8 +192,6 @@ pyarrow
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pybind11==2.10.4
-pycocotools @ git+https://github.com/nvidia/cocoapi.git@fa44301f7a8b3f95a9f2751d19bfd735b0f6c65d#subdirectory=PythonAPI
-pycparser==2.21
 pydantic==1.10.11
 Pygments==2.15.1
 pylibcugraph  
@@ -288,8 +278,6 @@ torchvision==0.14.0
 tornado==6.3.2
 tqdm==4.65.0
 traitlets==5.9.0
-transformer-engine @ git+https://github.com/NVIDIA/TransformerEngine.git@96ed6fc69d99a9cff49637dbc58c837c8d921ad7
-transformers==4.28.1
 treelite  
 treelite-runtime  
 triton  
@@ -320,3 +308,15 @@ yarl
 zict  
 zipp  
 zstandard==0.21.0
+jupyter-tensorboard @ git+https://github.com/cliffwoolley/jupyter_tensorboard.git@ffa7e26138b82549453306e06b535a9ac36db17a
+jupyter_client==8.3.0
+jupyter_core==5.3.1
+jupyterlab==2.3.2
+jupyterlab-pygments==0.2.2
+jupyterlab-server==1.2.0
+jupytext==1.14.7
+kiwisolver==1.4.4
+transformer-engine @ git+https://github.com/NVIDIA/TransformerEngine.git@96ed6fc69d99a9cff49637dbc58c837c8d921ad7
+transformers==4.28.1
+pycocotools @ git+https://github.com/nvidia/cocoapi.git@fa44301f7a8b3f95a9f2751d19bfd735b0f6c65d#subdirectory=PythonAPI
+pycparser==2.21
