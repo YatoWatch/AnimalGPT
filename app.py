@@ -4,6 +4,8 @@ import zipfile
 import os
 import shutil
 
+from flask_cors import CORS
+
 from urllib.request import urlopen
 from PIL import Image
 import timm
@@ -115,6 +117,8 @@ def zip_folder(folder_name, zip_name):
 
 
 ###########################################################################""
+
+CORS(app)
 
 # Route for the index page
 @app.route('/')
