@@ -152,8 +152,8 @@ def index():
 
 @app.route('/newchat', methods=['PUT'])
 def newchat():
-    shutil.rmtree(folder_animal)
-    os.mkdir(folder_animal)
+    shutil.rmtree("static/animal")
+    os.mkdir("static/animal")
     return {'answer':True}
 
 # Route to handle file uploads
