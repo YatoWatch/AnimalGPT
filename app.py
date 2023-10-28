@@ -150,6 +150,13 @@ CORS(app)
 def index():
     return render_template('index.html')
 
+@app.route('/newchat', methods=['GET'])
+def index():
+    if os.path.exists(folder_animal):
+        shutil.rmtree(folder_animal)
+    os.mkdir(folder_animal)
+    return render_template('index.html')
+
 # Route to handle file uploads
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -214,7 +221,6 @@ def get_animal_data():
     zip_animals_all()
     # Zip the result folder
     zip_folder(res_folder,zip_name)
-    
     zip_name+=".zip"
     return res
 

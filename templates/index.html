@@ -9,6 +9,7 @@
 </head>
 <body>
   <div class="left">
+    <button class="new-chat-button button clickable" onclick="newChat()">+ New chat</button>
     <ul id="chat-list" class="scroll-container"></ul>
 
     <form action="/upload" method="post" enctype="multipart/form-data">
@@ -267,9 +268,15 @@
 
     const HISTORY_KEY = "chat-history";
 
-    function newChat() {
+    async function newChat() {
         history = [];
         renderHistory();
+        const response = await fetch("/newchat", {
+        method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+          },
+      });
     }
 
     function loadChatList() {
