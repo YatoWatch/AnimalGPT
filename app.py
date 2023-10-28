@@ -179,7 +179,9 @@ def download_file():
 
 if __name__ == '__main__':
     privateGPT.ingest()
+
     shutil.rmtree(folder_animal)
     os.mkdir(folder_animal)
+    
     app.config['UPLOAD_FOLDER'] = 'source_documents'
     app.run(port=5000, host='0.0.0.0', debug=True)
