@@ -9,7 +9,7 @@ COPY . /app
 
 RUN apt-get update && apt-get install -y wget && apt-get install -y build-essential && apt-get install -y git
 
-
+RUN pip install langchain==0.0.177
 RUN pip install -r requirements.txt
 RUN pip install llama-cpp-python==0.1.65 --force-reinstall --upgrade --no-cache-dir
 RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
