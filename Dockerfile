@@ -9,6 +9,7 @@ COPY . /app
 
 RUN apt-get update && apt-get install -y wget && apt-get install -y build-essential && apt-get install -y git
 
+RUN pip install flask werkzeug pillow timm torch flask-cors
 RUN pip install -r requirements.txt
 RUN pip install llama-cpp-python --no-cache-dir
 
