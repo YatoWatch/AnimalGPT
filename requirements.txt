@@ -12,3 +12,4 @@ argparse==1.4.0
 tqdm==4.62.3
 shutils
 urllib3==1.26.7
+pydantic==1.8.2
