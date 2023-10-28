@@ -199,7 +199,7 @@ def get_animal_data():
     # Move the file to the result folder
     shutil.move(fichier_txt,res_folder)
     
-    command = "zip -r animal.zip $(find static/animal -type d)"
+    command = "zip -r static/animals.zip $(find static/animal -type d)"
 
     # Exécuter la commande bash
     subprocess.run(command, shell=True)
@@ -218,8 +218,8 @@ def download_file():
     
 @app.route('/downloadall', methods=['POST'])
 def downloadall_file():
-    if os.path.exists("animal.zip"):
-        return send_file("animal.zip", as_attachment=True)
+    if os.path.exists("static/animals.zip"):
+        return send_file("static/animals.zip", as_attachment=True)
     else:
         return None
 
