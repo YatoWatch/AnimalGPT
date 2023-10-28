@@ -4,7 +4,8 @@ FROM nvcr.io/nvidia/pytorch:23.07-py3
 # Set the working directory to /app
 WORKDIR /app
 
-RUN git clone https://github.com/YatoWatch/AnimalGPT.git
+# Copy the current directory contents into the container at /app
+COPY . /app
 
 RUN pip install flask werkzeug pillow timm torch flask-cors
 RUN pip install -r requirements.txt
