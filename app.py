@@ -150,12 +150,6 @@ CORS(app)
 def index():
     return render_template('index.html')
 
-@app.route('/newchat', methods=['GET'])
-def newchat():
-    if os.path.exists(folder_animal):
-        shutil.rmtree(folder_animal)
-    os.mkdir(folder_animal)
-    return render_template('index.html')
 
 # Route to handle file uploads
 @app.route('/upload', methods=['POST'])

@@ -165,17 +165,8 @@
       }
     }
 
-    async function newChat() {
-        const response = await fetch("/", {
-        method: "GET",
-          headers: {
-              "Content-Type": "application/json",
-          },
-      });
-
-      if (response.ok) {
-        console.log("newchat");
-      }
+    function newChat() {
+      location.reload();
     }
 
 
