@@ -136,7 +136,7 @@ def zip_animals_all():
         for foldername, subfolders, filenames in os.walk(src_dir):
             for filename in filenames:
                 file_path = os.path.join(foldername, filename)
-                if ".zip" in file_path:
+                if not(".zip" in file_path):
                     zipf.write(file_path, arcname=os.path.relpath(file_path, src_dir))
 
 
