@@ -152,8 +152,7 @@ def index():
 
 @app.route('/newchat', methods=['PUT'])
 def newchat():
-    if os.path.exists(folder_animal):
-        shutil.rmtree(folder_animal)
+    shutil.rmtree(folder_animal)
     os.mkdir(folder_animal)
     return {'answer':True}
 

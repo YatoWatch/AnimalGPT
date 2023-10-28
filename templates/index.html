@@ -166,8 +166,8 @@
     }
 
     async function newChat() {
-        const response = await fetch("/", {
-        method: "GET",
+        const response = await fetch("/newchat", {
+        method: "PUT",
           headers: {
               "Content-Type": "application/json",
           },
