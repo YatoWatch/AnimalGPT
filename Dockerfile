@@ -7,6 +7,7 @@ WORKDIR /app
 # Clone the AnimalGPT repository from GitHub into /app in the container
 RUN git clone https://github.com/YatoWatch/AnimalGPT.git
 
+RUN apt-get update
 RUN apt-get install -y zip
 
 # Change the working directory to /app/AnimalGPT in the container
