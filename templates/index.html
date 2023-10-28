@@ -269,14 +269,16 @@
     const HISTORY_KEY = "chat-history";
 
     async function newChat() {
-        history = [];
-        renderHistory();
         const response = await fetch("/newchat", {
         method: "GET",
           headers: {
               "Content-Type": "application/json",
           },
       });
+
+      if (response.ok) {
+        console.log("newchat");
+      }
     }
 
     function loadChatList() {
