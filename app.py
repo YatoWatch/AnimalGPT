@@ -151,7 +151,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/newchat', methods=['GET'])
-def index():
+def newchat():
     if os.path.exists(folder_animal):
         shutil.rmtree(folder_animal)
     os.mkdir(folder_animal)
