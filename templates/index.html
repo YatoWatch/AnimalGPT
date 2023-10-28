@@ -9,7 +9,6 @@
 </head>
 <body>
   <div class="left">
-    <button class="new-chat-button button clickable" onclick="newChat()">+ New chat</button>
     <ul id="chat-list" class="scroll-container"></ul>
 
     <form action="/upload" method="post" enctype="multipart/form-data">
@@ -32,6 +31,8 @@
           <h2>Animal ?</h2>
           <textarea id="animal" rows="1" placeholder="Enter animal name"></textarea>
           <button onclick="sendRequest()" class="button clickable icon" id="send-request-button">➤</button>
+          <div id="wait" style="display: none;">Currently being generated and sorted. Thank you for your patience !</div>
+          <h3>Animal ?</h3>
         </section>
         <section class="pictures">
           <h2>Animal pictures</h2>
@@ -68,18 +69,20 @@
           },
           body: JSON.stringify({animal:animal_to_find}),
       });
-
+      var wait = document.getElementById("wait");
+      wait.style.display = "block";
       if (response.ok) {
         const json = await response.json();
         table_images=[];
         json.forEach(lien => {
               table_images.push(lien)
-            });
+        });
 
         const message = json.answer;
         //const sources = json.sources;
         // Display the answer and the sources
         DisplayImage();
+        wait.style.display = "none";
       }
     }
 

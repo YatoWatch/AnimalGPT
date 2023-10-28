@@ -162,10 +162,18 @@ def get_animal_data():
     copy_images_to_folder(res,res_folder)
     zip_name= res_folder
 
-    zip_folder(res_folder,zip_name)
-
     answer, sources = privateGPT.call_model(data['animal'], "LlamaCpp", hide_source=False)
     print(answer)
+
+    fichier_txt = data['animal'] +'.txt'
+    # Ouvrir le fichier en mode écriture (write)
+    with open(fichier_txt, 'w') as fichier:
+    # Écrire le texte dans le fichier
+        fichier.write(answer)
+    
+    shutil.move(fichier_txt,res_folder)
+
+    zip_folder(res_folder,zip_name)
     
     zip_name+=".zip"
     return res
@@ -182,6 +190,6 @@ if __name__ == '__main__':
 
     shutil.rmtree(folder_animal)
     os.mkdir(folder_animal)
-    
+
     app.config['UPLOAD_FOLDER'] = 'source_documents'
     app.run(port=5000, host='0.0.0.0', debug=True)

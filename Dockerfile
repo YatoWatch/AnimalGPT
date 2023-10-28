@@ -16,7 +16,7 @@ RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.d
 
 
 RUN mkdir ./static/animal 
-RUN mkdir ./models && cd models/
+RUN mkdir ./models && cd /app/AnimalGPT/models
 RUN wget https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/resolve/main/llama-2-7b-chat.ggmlv3.q4_0.bin
 
 # Install any needed packages specified in requirements.txt

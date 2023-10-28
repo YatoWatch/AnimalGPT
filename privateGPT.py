@@ -119,7 +119,7 @@ def load_documents(source_dir: str, ignored_files: List[str] = []) -> List[Docum
         all_files.extend(
             glob.glob(os.path.join(source_dir, f"**/*{ext}"), recursive=True)
         )
-    filtered_files = [file_path for file_path in all_files if file_path not in ignored_files]
+    filtered_files = [file_path for file_path in all_files]
     print(filtered_files)
     with Pool(processes=os.cpu_count()) as pool:
         results = []
