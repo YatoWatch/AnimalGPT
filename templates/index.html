@@ -32,7 +32,6 @@
           <textarea id="animal" rows="1" placeholder="Enter animal name"></textarea>
           <button onclick="sendRequest()" class="button clickable icon" id="send-request-button">➤</button>
           <div id="wait" style="display: none;">Currently being generated and sorted. Thank you for your patience !</div>
-          <h3>Animal ?</h3>
         </section>
         <section class="pictures">
           <h2>Animal pictures</h2>
@@ -61,6 +60,10 @@
       var animal_to_find = document.getElementById('animal').value;
       animal_find = animal_to_find;
       // Send the request to the server
+
+      var wait = document.getElementById("wait");
+      wait.style.display = "block";
+
       const response = await fetch("/predict", {
         method: "POST",
           headers: {
@@ -69,8 +72,6 @@
           },
           body: JSON.stringify({animal:animal_to_find}),
       });
-      var wait = document.getElementById("wait");
-      wait.style.display = "block";
       if (response.ok) {
         const json = await response.json();
         table_images=[];

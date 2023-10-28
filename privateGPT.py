@@ -211,7 +211,7 @@ def calculate_layer_count() -> int | None:
     else:
         return (get_gpu_memory()//LAYER_SIZE_MB-LAYERS_TO_REDUCE)
 
-def call_model(query, model_type, hide_source):
+def call_model(query, hide_source):
     # Parse the command line arguments
     #args = parse_arguments()
     embeddings = HuggingFaceEmbeddings(model_name=embeddings_model_name)
