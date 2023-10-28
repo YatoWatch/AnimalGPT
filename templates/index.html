@@ -165,8 +165,17 @@
       }
     }
 
-    function newChat() {
-      location.reload();
+    async function newChat() {
+        const response = await fetch("/", {
+        method: "GET",
+          headers: {
+              "Content-Type": "application/json",
+          },
+      });
+
+      if (response.ok) {
+        location.reload();
+      }
     }
 
 
