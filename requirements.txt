@@ -13,4 +13,4 @@ tqdm==4.62.3
 shutils
 urllib3==1.26.7
 pydantic==1.8.2
-langchain==0.0.177
+langchain
