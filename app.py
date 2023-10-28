@@ -128,6 +128,17 @@ def copy_images_to_folder(image_paths, folder_name):
 def zip_folder(folder_name, zip_name):
     shutil.make_archive(zip_name, 'zip', folder_name)
 
+def zip_animals_all():
+    src_dir = "static/animal/"
+    zip_path = "static/animals.zip"
+
+    with zipfile.ZipFile(zip_path, 'w') as zipf:
+        for foldername, subfolders, filenames in os.walk(src_dir):
+            for filename in filenames:
+                file_path = os.path.join(foldername, filename)
+                if not filename.endswith('.zip'):
+                    zipf.write(file_path, arcname=os.path.relpath(file_path, src_dir))
+
 
 ###########################################################################
 # Initialize Flask app and enable CORS
@@ -199,10 +210,8 @@ def get_animal_data():
     # Move the file to the result folder
     shutil.move(fichier_txt,res_folder)
     
-    command = "zip -r static/animals.zip $(find static/animal -type d)"
-
-    # Exécuter la commande bash
-    subprocess.run(command, shell=True)
+    # Zip all animals
+    zip_animals_all()
     # Zip the result folder
     zip_folder(res_folder,zip_name)
     
