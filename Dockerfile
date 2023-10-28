@@ -4,8 +4,7 @@ FROM nvcr.io/nvidia/pytorch:23.07-py3
 # Set the working directory to /app
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+RUN git clone https://github.com/YatoWatch/AnimalGPT.git
 
 RUN pip install flask werkzeug pillow timm torch flask-cors
 RUN pip install -r requirements.txt
@@ -30,5 +29,4 @@ ENV FLASK_APP=app.py
 # Define environment variable
 ENV FLASK_RUN_HOST=0.0.0.0
 
-CMD ["flask", "run"]
 
