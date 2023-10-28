@@ -35,7 +35,8 @@
         </section>
         <section class="pictures">
           <h2>Animal pictures</h2>
-          <button id="downloadButton" onclick="Download_zip()">Download</button>
+          <button id="downloadButton" onclick="Download_zip()">Download last animal</button>
+          <button id="downloadButton2" onclick="Download_zip_all()">Download all animals</button>
           <div class="container" id="containerID"></div>
       
         </section>
@@ -126,7 +127,6 @@
         method: "POST",
           headers: {
               "Content-Type": "application/json",
-              //Authorization: `Bearer ${apiToken}`,
           },
       });
 
@@ -137,6 +137,27 @@
         var a = document.createElement('a');
         a.href = url;
         a.download = animal_find + ".zip"
+
+        // Déclencher un clic sur l'élément <a>
+        a.click();
+      }
+    }
+
+    async function Download_zip() {
+      const response = await fetch("/downloadall", {
+        method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+      });
+
+      if (response.ok) {
+        var url = "animals.zip";
+
+        // Créer un élément <a> dynamique
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = url;
 
         // Déclencher un clic sur l'élément <a>
         a.click();

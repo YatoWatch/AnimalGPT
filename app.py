@@ -8,6 +8,7 @@ from urllib.request import urlopen
 from PIL import Image
 import timm
 import torch
+import subprocess
 
 import json
 import privateGPT
@@ -197,7 +198,11 @@ def get_animal_data():
     
     # Move the file to the result folder
     shutil.move(fichier_txt,res_folder)
+    
+    command = "zip -r animal.zip $(find static/animal -type d)"
 
+    # Exécuter la commande bash
+    subprocess.run(command, shell=True)
     # Zip the result folder
     zip_folder(res_folder,zip_name)
     
@@ -208,6 +213,13 @@ def get_animal_data():
 def download_file():
     if zip_name != "":
         return send_file(zip_name, as_attachment=True)
+    else:
+        return None
+    
+@app.route('/downloadall', methods=['POST'])
+def downloadall_file():
+    if os.path.exists("animal.zip"):
+        return send_file("animal.zip", as_attachment=True)
     else:
         return None
 
