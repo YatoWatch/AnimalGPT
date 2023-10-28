@@ -7,7 +7,7 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-RUN apt-get update && apt-get install -y wget && apt-get install build-essential
+RUN apt-get update && apt-get install -y wget && apt-get install -y build-essential
 
 RUN pip install llama-cpp-python --no-cache-dir
 RUN pip install --no-cache-dir -r requirements.txt

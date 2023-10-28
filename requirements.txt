@@ -10,5 +10,5 @@ langchain==0.0.1  # Replace with the correct version you are using
 numpy==1.22.0
 argparse==1.4.0
 tqdm==4.62.3
-shutil
+shutils
 urllib3==1.26.7
