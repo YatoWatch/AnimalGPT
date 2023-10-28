@@ -5,7 +5,9 @@ FROM nvcr.io/nvidia/pytorch:23.07-py3
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY . /app
+RUN git clone https://github.com/YatoWatch/AnimalGPT.git
+
+
 
 # Install any needed packages specified in requirements.txt
 
