@@ -9,8 +9,9 @@ COPY . /app
 
 RUN apt-get update && apt-get install -y wget && apt-get install -y build-essential && apt-get install -y git
 
-RUN pip install llama-cpp-python --no-cache-dir
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install llama-cpp-python --no-cache-dir
+
 
 
 RUN mkdir ./static/animal 
