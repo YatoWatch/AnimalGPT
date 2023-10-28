@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM nvidia/cuda:11.3.1-base
+FROM nvcr.io/nvidia/pytorch:23.07-py3
 
 # Set the working directory to /app
 WORKDIR /app
